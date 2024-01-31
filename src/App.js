@@ -1,33 +1,40 @@
 import logo from "./assets/logo.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "./config/firebase";
 function App() {
-  const [lengthOfWord, setLengthOfWord] = useState([]);
+  const [lengthOfWord, setLengthOfWord] = useState(0);
   const [words, setWords] = useState("");
   const handleChangeInputValue = (e) => {
-    let splitted = handleSplitWords(e.target.value);
-    setWords(splitted.join(" "));
-    setLengthOfWord(splitted);
+    setWords(e.target.value);
+    setLengthOfWord(length(e.target.value));
   };
-  const handleSplitWords = (splitted) => {
-    return splitted.split(" ");
+  const length = (word) => {
+    return word.split(" ").filter(Boolean).length;
   };
-  const showNothing = () => {
-    alert("Nothing :) Hello World");
-  };
+  useEffect(() => {
+    logEvent(analytics, "screen_view", {
+      screen_name: "Home Page",
+      screen_class: "Main",
+    });
+    var userAgent = navigator.userAgent;
 
+     logEvent(analytics, "user_agent_info", {
+      user_agent: userAgent,
+    });
+  }, []);
   return (
     <div className="App">
       <nav className="flex-x">
-        <a
-          href="https://www.linkedin.com/in/nurmuhammad-mamurjonov-49913025a/"
-          rel="noreferrer"
-          target={"_blank"}
-        >
-          <img src={logo} alt="This is logo of the `How Many Words?` website" />
-        </a>
+        <img src={logo} alt="This is logo of the `How Many Words?` website" />
         <div className="navItems flex-x">
-          <p onClick={showNothing}>About</p>
-          <p>GitHub code</p>
+          <a
+            href="https://github.com/mamurovDev/HowManyWords"
+            rel="noreferrer"
+            target="_blank"
+          >
+            GitHub code
+          </a>
           <a
             href="https://www.linkedin.com/in/nurmuhammad-mamurjonov-49913025a/"
             target={"_blank"}
@@ -39,20 +46,25 @@ function App() {
       </nav>
       <div className="body flex-y">
         <div className="total">
-          <h2>Total words: {lengthOfWord.length}</h2>
+          <h2>Essay Input</h2>
+          <p className="description">
+            Type your essay in the box below and the word count will be updated
+            in real time.{" "}
+          </p>
         </div>
         <form>
-          <textarea className="nam" value={words} onInput={handleChangeInputValue}></textarea>
+          <textarea
+            className="nam"
+            value={words}
+            onInput={handleChangeInputValue}
+            placeholder="Type your essay here..."
+            spellCheck="true"
+          ></textarea>
+          <p className="word">Word count: {lengthOfWord}</p>
         </form>
       </div>
       <footer className="flex-x">
-        <a
-          href="https://github.com/mamurovDev"
-          rel="noreferrer"
-          target="_blank"
-        >
-          © mamurovDev
-        </a>
+        <p>Made by ❤️</p>
       </footer>
     </div>
   );
