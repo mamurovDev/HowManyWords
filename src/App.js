@@ -1,8 +1,11 @@
 import logo from "./assets/logo.png";
 import { useState, useEffect } from "react";
 import { logEvent } from "firebase/analytics";
-import { analytics } from "./config/firebase";
+import { analytics, db } from "./config/firebase";
+import { collection, addDoc } from "firebase/firestore";
+
 function App() {
+  const site = window.location;
   const [lengthOfWord, setLengthOfWord] = useState(0);
   const [words, setWords] = useState("");
   const handleChangeInputValue = (e) => {
@@ -12,6 +15,7 @@ function App() {
   const length = (word) => {
     return word.split(" ").filter(Boolean).length;
   };
+  const userAgentCollection = collection(db, "userAgents");
   useEffect(() => {
     logEvent(analytics, "screen_view", {
       screen_name: "Home Page",
@@ -19,10 +23,24 @@ function App() {
     });
     var userAgent = navigator.userAgent;
 
-     logEvent(analytics, "user_agent_info", {
+    logEvent(analytics, "user_agent_info", {
       user_agent: userAgent,
     });
-  }, []);
+
+    async function add() {
+      const userAgent = navigator.userAgent;
+      const date = new Date();
+      
+
+      addDoc(userAgentCollection, {
+        userAgent,
+        date: date.toTimeString(),
+        site: JSON.stringify(site),
+      });
+    }
+    add();
+  }, [userAgentCollection, site]);
+
   return (
     <div className="App">
       <nav className="flex-x">
