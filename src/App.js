@@ -30,7 +30,6 @@ function App() {
     async function add() {
       const userAgent = navigator.userAgent;
       const date = new Date();
-      
 
       addDoc(userAgentCollection, {
         userAgent,
@@ -64,7 +63,9 @@ function App() {
       </nav>
       <div className="body flex-y">
         <div className="total">
-          <h2>Essay Input</h2>
+          <div className="flex-x justify-between">
+            <h2>Essay Input</h2>
+          </div>
           <p className="description">
             Type your essay in the box below and the word count will be updated
             in real time.{" "}

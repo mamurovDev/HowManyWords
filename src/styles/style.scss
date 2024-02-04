@@ -10,6 +10,9 @@ body {
   flex-direction: column;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
 .flex-y {
   display: flex;
   flex-direction: column;
@@ -55,6 +58,7 @@ body {
     .total {
       width: 60%;
       margin-bottom: 30px;
+      
       .description {
         margin-top: 5px;
         font-size: 16px;
@@ -94,7 +98,7 @@ body {
   }
 }
 
-@media (min-width: 100px) and (max-width: 400px) {
+@media (min-width: 100px) and (max-width: 600px) {
   .nam {
     font-size: smaller;
   }
