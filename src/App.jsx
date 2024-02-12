@@ -5,7 +5,7 @@ import { analytics, db } from "./config/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
 function App() {
-  const site = window.location;
+  const site = window.location.origin;
   const [lengthOfWord, setLengthOfWord] = useState(0);
   const [words, setWords] = useState("");
   const handleChangeInputValue = (e) => {
@@ -53,13 +53,15 @@ function App() {
     }
     async function add() {
       const date = new Date();
-
-      addDoc(userAgentCollection, {
-        browser: browserInfo,
-        device: deviceInfo,
-        date: date.toTimeString(),
-        site: JSON.stringify(site),
-      });
+      console.log(date);
+      try {
+        addDoc(userAgentCollection, {
+          browser: browserInfo,
+          device: deviceInfo,
+          date: date,
+          site: JSON.stringify(site),
+        });
+      } catch (error) {}
     }
     add();
   }, [userAgentCollection, site]);
